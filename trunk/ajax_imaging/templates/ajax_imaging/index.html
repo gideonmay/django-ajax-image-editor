@@ -1,0 +1,59 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>Image Editor</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<link href="{{MEDIA_URL}}css/ajax_imaging/ImageEditor.css" rel="stylesheet" type="text/css" >
+	<script type="text/javascript" src="{{MEDIA_URL}}js/ajax_imaging/PageInfo.js"></script>
+	<script type="text/javascript" src="{{MEDIA_URL}}js/ajax_imaging/ImageEditor.js"></script>
+	<script type="text/javascript">
+		if (window.opener){
+			window.moveTo(0, 0);
+			window.resizeTo(screen.width, screen.height - 28);
+			window.focus();
+		}
+		window.onload = ImageEditor.init;
+	</script>
+</head>
+<body>
+
+	<a href="{% url my_image_archive %}" class="logout">Archive</a>
+	<div id="image-editor">
+		<div class="toolbar">
+<!--
+			<form action="/imaging/uploadImage/" enctype="multipart/form-data" method="post">
+				<input type="file" id="data" name="data" />
+				<input type="submit" id="upload" name="upload" value="Edit" />
+			</form>
+			<span class="spacer"> || </span>
+			<button onclick="javascript:location.href='/saveImage';">Save to Disk</button>
+			<span class="spacer"> || </span>
+			<button onclick="ImageEditor.im_feeling_lucky()">I'm Feeling Lucky</button>
+-->
+                        <button onclick="ImageEditor.viewOriginal()">View Original</button>
+<!--                        <button onclick="ImageEditor.viewActive()">View Active</button> 
+
+-->
+                        <button onclick="ImageEditor.save()">Save</button>
+                        <span class="spacer"> || </span>
+                        <button onclick="ImageEditor.save_as()">Save As</button>
+			<input id="txt-fname" type="text" value="filename" size="7" maxlength="50" />
+                        <span class="spacer"> || </span>
+                        <button onclick="ImageEditor.undo()">Undo/Redo</button>
+                        <span class="spacer"> || </span>
+			w:<input id="txt-width" type="text" size="3" maxlength="4" />
+			h:<input id="txt-height" type="text" size="3" maxlength="4" />
+			<button onclick="ImageEditor.resize();">Resize</button>
+			<span class="spacer"> || </span>
+			<button onclick="ImageEditor.rotate(270)">90&deg;CCW</button>
+			<button onclick="ImageEditor.rotate(90)">90&deg;CW</button>
+			<span class="spacer"> || </span>
+			<button onclick="ImageEditor.crop()">Crop</button>
+			<span id="crop-size"></span>
+		</div>
+		<div id="image">Select an image to upload</div>
+		<img id="loader-image" />
+	</div>
+
+</body>
+</html>
