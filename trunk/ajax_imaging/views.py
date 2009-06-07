@@ -10,16 +10,6 @@ from settings import MEDIA_ROOT
 import Image as PImage
 import os
 from subprocess import *
-
-"""
-import cgi
-import wsgiref.handlers
-from google.appengine.ext import webapp
-from google.appengine.ext.webapp import template
-from google.appengine.ext import db
-from google.appengine.api import users
-from google.appengine.api import images
-"""
 from ajax_imaging.getimageinfo import getImageInfo
 
 def execute(cmd):
@@ -197,26 +187,4 @@ def process_image(request,id=1):
 		    img.save(pdir+'/edit/'+filename,"JPEG")
 		else:
 		    img.save(pdir+'/edit/'+filename,"PNG")
-#                content_type, width, height = getImageInfo()
-#                width, height = img.size
-#                image.output_encoding = output_encoding
-#                saved_image.content_type = content_type
-#                saved_image.width = width
-#                saved_image.height = height
-#                saved_image.save()
-"""
-class SaveImageHandler(webapp.RequestHandler):
-    def get(self):
-    
-        #check login
-        if not users.get_current_user():
-            self.redirect(users.create_login_url('/'))
-            
-        user = users.get_current_user()
-        query = db.GqlQuery("SELECT * FROM Image WHERE user = :1", user)
-        image = query.get()
-        if image:
-            self.response.headers['Content-Disposition'] = str("attachment; filename=edited_" + str(image.width) + "x" + str(image.height) + "." +  image.content_type.split("/")[1])
-            self.response.headers['Content-Type'] = str(image.content_type)
-            self.response.out.write(image.data)                
-"""
+	
