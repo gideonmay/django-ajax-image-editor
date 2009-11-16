@@ -1,0 +1,87 @@
+{% extends "imgallery/base.html" %}
+{% load i18n thumbnail %}
+
+{% block jsblock %}
+<!-- <script type="text/javascript" src="{{MEDIA_URL}}js/ajax_imaging/jquery.tools.min.js" ></script> -->
+<script type="text/javascript" src="{{MEDIA_URL}}js/ajax_imaging/jquery.lightbox-0.5.min.js" ></script>
+<script type="text/javascript" src="{{MEDIA_URL}}js/ui.core.js" ></script>
+<script type="text/javascript" src="{{MEDIA_URL}}js/ui.draggable.js" ></script>
+<script type="text/javascript" src="{{MEDIA_URL}}js/ui.droppable.js" ></script>
+<script type="text/javascript" src="{{MEDIA_URL}}js/ajax_imaging/jquery.gallery.js"></script>
+<script type="text/javascript" src="{{MEDIA_URL}}js/ajax_imaging/jquery.imgareaselect.min.js"></script>
+<script type="text/javascript" src="{{MEDIA_URL}}js/ajax_imaging/jquery.imaging.js"></script>
+
+<link rel="stylesheet" type="text/css" href="{{MEDIA_URL}}stylesheets/ajax_imaging/imgareaselect-default.css" />
+<link rel="stylesheet" type="text/css" href="{{MEDIA_URL}}stylesheets/ajax_imaging/scrollable.css" />
+<link rel="stylesheet" type="text/css" href="{{MEDIA_URL}}stylesheets/ajax_imaging/overlay.css" />
+<link rel="stylesheet" type="text/css" href="{{MEDIA_URL}}stylesheets/ajax_imaging/gallery.css" />
+<link rel="stylesheet" type="text/css" href="{{MEDIA_URL}}stylesheets/ajax_imaging/jquery.lightbox-0.5.css" />
+<link rel="stylesheet" type="text/css" href="{{MEDIA_URL}}stylesheets/ajax_imaging/tabs-accordion.css" />
+<style>
+.drag-label{
+	border: 1px solid #666;
+	background-color: #e66; 
+}
+.state-hover{
+	background-color: #f6ac32;
+	height:0px;
+}	
+.state-active{
+	background-color: #ffe45c;
+}
+.drop-here {
+	border: 1px solid #555;
+	height: 25px;
+	width: 200px;
+	float: right;
+	padding-top: 5px;
+	padding-left: 7px;
+}
+#image-editor{
+	background-color: #eee;
+	border: 1px solid #333;
+	width: 770px;
+}
+#loader-image{
+	display:none;
+}
+</style>
+<script type="text/javascript">
+function hideImageEditor(){
+	ImageEditor.do_hide();
+	$("#gtab-2").hide();$("#gtab-1").show();
+	
+}
+function showImageEditor(){
+	$("#gtab-2").show();$("#gtab-1").hide();
+	ImageEditor.do_show();
+}
+function exitImageEditor(){
+	if (ImageEditor.changes){
+		if(confirm('Сохранить изменения и выйти?')){
+			ImageEditor.save();
+			hideImageEditor();
+		}
+	}else {
+		hideImageEditor();
+	}
+}
+$(function() {
+	gallery.init();
+	ImageEditor.init();
+	hideImageEditor();
+});
+</script>
+{% endblock %}
+
+{% block content %}
+<div>
+<div id="gtab-1" style="float:left;">
+{% include "imgallery/folders-stuff-v2.html" %}
+</div>
+<div id="gtab-2" style="float:left;">
+{% include "imgallery/image-editor-stuff-v2.html" %}
+</div>
+<div style="clear:both;"></div>
+</div>
+{% endblock %}

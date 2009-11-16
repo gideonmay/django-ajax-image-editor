@@ -1,0 +1,243 @@
+{% extends "imgallery/base.html" %}
+{% load i18n thumbnail %}
+
+{% block jsblock %}
+<!-- <script type="text/javascript" src="{{MEDIA_URL}}js/ajax_imaging/jquery.tools.min.js" ></script> -->
+<script type="text/javascript" src="{{MEDIA_URL}}js/ajax_imaging/jquery.lightbox-0.5.min.js" ></script>
+<script type="text/javascript" src="{{MEDIA_URL}}js/ui.core.js" ></script>
+<script type="text/javascript" src="{{MEDIA_URL}}js/ui.draggable.js" ></script>
+<script type="text/javascript" src="{{MEDIA_URL}}js/ui.droppable.js" ></script>
+<link rel="stylesheet" type="text/css" href="{{MEDIA_URL}}stylesheets/ajax_imaging/scrollable.css" />
+<link rel="stylesheet" type="text/css" href="{{MEDIA_URL}}stylesheets/ajax_imaging/overlay.css" />
+<link rel="stylesheet" type="text/css" href="{{MEDIA_URL}}stylesheets/ajax_imaging/gallery.css" />
+<link rel="stylesheet" type="text/css" href="{{MEDIA_URL}}stylesheets/ajax_imaging/jquery.lightbox-0.5.css" />
+<script type="text/javascript">
+$(document).ready(function(){
+	var status = $("div.status");
+	$("div.albums").scrollable({next: 'a.next', prev: 'a.prev'});
+	$("div.pictures").scrollable({next: 'a.nextImage', prev: 'a.prevImage'});
+	$("div.pictures").addClass("scrollable-withjs");
+	$("div.albums").addClass("scrollable-withjs");
+	$("div.albums").click(function() {
+		$(status).html("{{_("loading")|capfirst}}...");
+		var container = $("div.albums div.active");
+		var name = $(container).find("input[name='object-name']").val();
+		var id = $(container).find("input[name='object-id']").val();
+		//var src = $(container).find("img").attr('src');
+		var curfolder = $("div.current-folder");
+		var form = $("#add-image-form");
+		//$(curfolder).find("img").attr('src', src);
+		$(curfolder).find("div.caption").html(name);
+		$(form).find("input[name='folder']").val(id);
+		$.ajax({
+	        type: "POST",
+	        dataType: "json",
+	        data: { object_id: id},
+	        success: function(json){
+	            if (json.error){
+	            	//alert(json.error);
+	            	$("div.pictures div.items").html('');
+	            }else{
+	            	var html = '';
+	            	var i = 0;
+	            	for (i = 0; i < json.thumb_list.length; i++){
+	            		html+='<div class="picture-item">'
+	            		+ '<a href="'+json.orig_list[i]+'" rel="lightbox" title="'+json.names[i]+'" ><img src="{{MEDIA_URL}}'+json.thumb_list[i]+'" /></a>'
+						+ '<div class="description">'
+						+ '<input type="hidden" name="object-id" id="object-id" value="'+json.ids[i]+'" />'
+						+ '<input type="hidden" name="object-name" id="object-name" value="'+json.names[i]+'" />'
+						+ '' + json.sizes[i]+' kB<br>'
+						+ '<a class="small-icon icon-edit" href=""></a>'						
+						+ '<a class="small-icon icon-trash" onClick="deleteImage($(this).parent().parent(), '+json.ids[i]+');" href="#album-editor"></a>'
+						+ '</div>'
+	            		+ '</div>';
+	            	}
+	            	$("div.pictures div.items").html(html);
+					$("div.picture-item").draggable({appendTo: '#album-editor', helper: 'clone',scroll: false, cursor: 'crosshair', containment: '#album-editor', zIndex: 2700});
+					$("div.pictures a[rel]").lightBox({
+						imageLoading: '{{MEDIA_URL}}stylesheets/ajax_imaging/lightbox_img/lightbox-ico-loading.gif',
+						imageBtnClose: '{{MEDIA_URL}}stylesheets/ajax_imaging/lightbox_img/lightbox-btn-close.gif',
+						imageBtnPrev: '{{MEDIA_URL}}stylesheets/ajax_imaging/lightbox_img/lightbox-btn-prev.gif',
+						imageBtnNext: '{{MEDIA_URL}}stylesheets/ajax_imaging/lightbox_img/lightbox-btn-next.gif',
+					});
+	            }
+	            $(status).html("{{_("loaded")|capfirst}}");
+	            
+	        }
+		});
+	});
+	$("div.albums").click();
+	var api = $("#overlay-form").overlay({api:true, oneInstance: false, expose: '#eee', closeSpeed: 1000});
+	window.openOverlay = function(){
+		api.load();
+	}
+	$("div.albums div.items div.album-item").droppable({
+		accept: '.picture-item',
+		activeClass: 'state-active',
+		hoverClass: 'state-hover',
+		drop: function(event, ui){
+            $(status).html("{{_("loadeding")|capfirst}}...");
+			var image_id = $(ui.draggable).find("input[name='object-id']").val();
+			var folder_id = $(this).find("input[name='object-id']").val();
+			var cfolder_id = $("div.albums div.active").find("input[name='object-id']").val();
+			var div = $(this);
+			if (folder_id != cfolder_id) {
+//				alert(folder_id + ' ' + cfolder_id + ' ' + image_id);
+				$.ajax({
+			        type: "POST",
+			        dataType: "json",
+			        data: { 'action': 'move', 'image_id': image_id, 'folder_id': folder_id, 'cfolder_id': cfolder_id},
+			        success: function(json){
+			        	if (json.error){
+			        		alert(json.error);
+			        	}else{
+			        		$(div).click();
+			        	}
+			            $(status).html("{{_("loaded")|capfirst}}");
+			        }
+				});
+			}
+		}
+	});
+});
+function addFile(){
+	var form = $("form.add-image-form");
+	var counter = $(form).find("input[name='file_count']");
+	var clone = $(form).find("div#input > dd > input[name='data']").parent().parent();
+	
+	var clone_area = $(form).find("div.clone-area");
+	var html = $(clone_area).html();
+	var n = parseInt($(counter).val());
+	$(clone).find("input").attr('id',$(clone).find("input").attr('id')+'_'+n);
+	html += $(clone).html();
+	
+	$(clone_area).html(html);
+	$(counter).val(n+1);
+}
+function deleteImage(elem, image_id){
+	var imaging_prefix = '/imaging/';
+	if (confirm('{{_("Are you sure?")}}')){
+	$.ajax({
+        type: "POST",
+        dataType: "json",
+        url: imaging_prefix + image_id + '/delete/',
+        success: function(json){
+        	if (json.success){
+				$(elem).remove('');
+				return false;
+            }
+        }
+    });
+    }else{
+    	return false;
+    }
+}
+function deleteFolder(elem, folder_id){
+	return false;
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<h1>{{_("my albums")|capfirst}}</h1>
+<div style="float: left;margin-left:5px;width:700px;">
+Верхний скролл отображает папки с картинками.
+В нижнем отоброжаются картинки текуще выбранной папки.
+Жмите 
+	"<a style="font-family: country;">
+		{{_("upload photo")|capfirst}}
+	</a>"
+ чтобы добавить картинку в папку.
+Для того чтобы переместить картинку из одной папки в другую, перетащите
+картинку с нижнего скролла на верхний. Чтобы просмотреть картинки папки в формате
+галлереии нажмите на ту с которой хотели бы начать просмотр.
+</div>
+
+<div class="album-editor" id="album-editor" style="border: 1px solid #eee; float:left;">
+<!-- <a href="{% url create_photo_gallery %}">{{_("create photo gallery")|capfirst}}</a> | <a href="{% url create_article_gallery %}">{{_("create gallery for article")|capfirst}}</a> -->
+<div>
+	<div class="status"></div>	
+	<div>
+	<div class="caption">{{_("albums")|capfirst}}
+	</div>
+	<a class="button" href="{% url create_photo_gallery %}" onClick="">
+		<div>{{_("create album")|capfirst}}</div>
+		<img src="{{MEDIA_URL}}js/ajax_imaging/add.png">
+	</a>
+	<div style="clear:both;"></div>
+	</div>
+	<!-- navigator -->
+	<div class="navi"></div>
+	<!-- prev link -->
+	<a class="prev icon" href="#album-editor"></a>
+	<div class="scrollable albums">
+		<div class="items">
+		{% for object in object_list %}
+			<div class="{% ifequal forloop.counter 1 %}active{%endifequal%} album-item">
+				{% thumbnail object.get_image 150x120 crop,upscale as thumb %}
+				<img alt="{{_("album")|capfirst}} {{object.name}}" title="{{_("album")|capfirst}} {{object.name}}" src="{{thumb}}" />
+				<div class="description">
+				<input type='hidden' name='object-id' id='object-id' value="{{object.id}}" />
+				<input type='hidden' name='object-name' id='object-name' value="{{object.name}}" />
+				<noscript><a href="#">{{_("open")|capfirst}}</a><br></noscript>
+				{{object.images.count}} {{_("pictures")}}
+				</div>
+			</div>
+		{% endfor %}
+		</div>
+	</div>
+	<!-- next link -->
+	<a class="next icon" href="#album-editor" ></a>
+	<div style="clear:both;"></div>
+	
+</div>
+<div>
+	<div class="current-folder">
+		<!--  <img src="" /> -->
+		<div class="caption">{{object_list.0.name}}</div>
+	<!-- <a class="icon icon-add" title="{{_("upload image")|capfirst}}" onClick="openOverlay();" href="#album-editor"></a> -->
+	<a class="button" href="#" onClick="openOverlay();">
+		<div>{{_("upload photo")|capfirst}}</div>
+		<img src="{{MEDIA_URL}}js/ajax_imaging/add.png">
+	</a>
+	<div style="clear:both;"></div>
+	</div>
+	<!-- prev link -->
+	<a class="prevImage icon" href="#album-editor"></a>
+	<div class="scrollable pictures">
+		<div class="items">
+		</div>
+	</div>
+	<!-- next link -->
+	<a class="nextImage icon" href="#album-editor" ></a>
+	<div style="clear:both;"></div>
+</div>
+</div>
+
+<div style="clear:both;">
+<div class="overlay" id="overlay-form">
+<form class="add-image-form" id="add-image-form" enctype="multipart/form-data" method="post" action="{% url image_editor_upload %}">
+<dl>
+{% for field in form %}
+	<div id="input">
+	{% if field.is_hidden %}
+	{{field}}
+	{% else %}
+    <dt id="formlabel">{{ field.label }}</dt>
+    <dd>{{ field }}</dd>
+    {% if field.help_text %}<dd class="help_text">{{ field.help_text }}</dd>{% endif %}
+    {% if field.errors %}<dd class="myerrors">{{ field.errors }}</dd>{% endif %}
+    {% endif %}
+    </div>
+{% endfor %}
+</dl>
+<div class="clone-area"></div>
+<input type="hidden" name="next" value="{{request.path_info}}" />
+<input type="submit" value="Upload"/>
+</form>
+	<a class="button" href="#album-editor" onClick="addFile();">
+		<div>{{_("add more")|capfirst}}</div>
+		<img src="{{MEDIA_URL}}js/ajax_imaging/add.png">
+	</a>
+</div>
+{% endblock %}

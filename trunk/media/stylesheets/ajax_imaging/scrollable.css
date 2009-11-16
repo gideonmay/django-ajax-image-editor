@@ -1,0 +1,78 @@
+/*
+	root element for the scrollable.
+	when scrolling occurs this element stays still.
+*/
+div.scrollable {
+
+	/* required settings */
+	position:relative;
+	overflow:scroll;
+	width: 740px;
+	height: 250px;
+	border: 1px solid gray;
+	float:left; 
+}
+
+div.pictures {
+
+	/* required settings */
+	position:relative;
+	overflow:scroll;
+	width: 740px;
+	height: 96px;
+	border: 1px solid gray; 
+	float: left;
+}
+.visible {
+	visibility: visible;	
+}
+.invisible {
+	visibility: hidden;
+}
+div.scrollable-withjs {
+	overflow:hidden;
+}
+
+div.empty-scrollable {
+	background: url(/media/js/ajax_imaging/empty.png) no-repeat center center;
+}
+/*
+	root element for scrollable items. Must be absolutely positioned
+	and it should have a super large width to accomodate scrollable items.
+	it's enough that you set width and height for the root element and
+	not for this element.
+*/
+div.scrollable div.items {
+	/* this cannot be too large */
+	width:20000em;
+	position:absolute;
+}
+
+div.items div.description {
+	float:left;
+	border: 1px solid black;
+	background-color: #333;
+	color: #eee;
+	width: 100%;
+}
+
+/*
+	a single item. must be floated on horizontal scrolling
+	typically this element is the one that *you* will style
+	the most.
+*/
+div.scrollable div.items div {
+	float:left;
+	width: 150px;
+	height: 130px;
+}
+
+div.pictures div.items div {
+	float: left;
+	width:96px;
+}
+/* you may want to setup some decorations to active item */
+div.items div.active {
+	border:1px inset #ccc;
+	background-color:#fff;
+}
