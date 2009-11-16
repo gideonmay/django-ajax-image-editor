@@ -1,0 +1,66 @@
+a {
+	cursor: pointer;
+}
+a.button {
+	display: inline-block;
+	height: 24px;
+	margin: 3px 1px 3px 0;
+	padding: 3px 5px 3px 5px;
+	text-decoration: none;
+	border: 1px solid gray;
+	float:left;
+}
+a.button img {
+	clear:right;
+}
+a.button:hover {
+	background-color: #eee;
+}
+a.button div{
+	padding-top: 4px;
+	margin-right: 3px;
+	float:left;
+	font-family: country;
+}
+
+
+a.icon {
+	text-decoration:none;
+	height: 24px;
+	width: 24px;
+	display: inline-block;
+	float: left;
+}
+
+a.small-icon {
+	text-decoration:none;
+	height: 16px;
+	width: 16px;
+	display: inline-block;
+	float: left;
+}
+a.icon-trash {
+		background-image: url('/media/js/ajax_imaging/icons/trash.png');
+}
+a.icon-edit {
+		background-image: url('/media/js/ajax_imaging/icons/edit.png');
+}
+a.icon-add {
+		background-image: url('/media/js/ajax_imaging/icons/add.png');
+}
+
+a.prev, a.prevImage {
+		background-image: url('/media/js/ajax_imaging/icons/left_arrow.png');
+}
+a.next, a.nextImage {
+		background-image: url('/media/js/ajax_imaging/icons/right_arrow.png');
+}
+
+div.caption {
+	font-size: 20px;
+	margin-right: 10px;
+	float: left;
+}
+div.status {
+	display: none;
+}

@@ -1,0 +1,47 @@
+<div id="image-editor" >
+	<div id="image-title"></div>
+	<div id="button-panel" style="display:block;width:770px;" >
+		<a class="button" name='b_original' href="javascript:{return false;}">
+			<div>{{_("to original")|capfirst}}</div>
+			<img src="{{MEDIA_URL}}js/ajax_imaging/icons/house.png">
+		</a>
+		<a class="button" name='b_save' href="javascript:{return false;}">
+			<div>{{_("save")|capfirst}}</div>
+			<img src="{{MEDIA_URL}}js/ajax_imaging/icons/save.png">
+		</a>
+		<a class="button" name='b_undo' href="javascript:{return false;}">
+			<div>{{_("undo")|capfirst}}</div>
+			<img src="{{MEDIA_URL}}js/ajax_imaging/icons/trackback.png">
+		</a>
+		<a class="button" name='b_ccw' href="javascript:{return false;}">
+			<img src="{{MEDIA_URL}}js/ajax_imaging/icons/undo.png">
+		</a>
+		<a class="button" name='b_cw' href="javascript:{return false;}">
+			<img src="{{MEDIA_URL}}js/ajax_imaging/icons/redo.png">
+		</a>
+		<a class="button" name='b_crop' href="javascript:{return false;}">
+			<div>{{_("crop")|capfirst}}</div>
+			<img src="{{MEDIA_URL}}js/ajax_imaging/icons/scissors.png">
+		</a>
+		<div style="height:32px;padding-top:5px;margin-right:2px;float:left;border:1px solid gray;">
+		w:<input type="input" size="4" id="txt-width" />
+		h:<input type="input" size="4" id="txt-height" />
+		</div>
+		<a class="button" name='b_resize' href="javascript:{return false;}">
+			<div>{{_("resize")|capfirst}}</div>
+		</a>
+		<div style="clear:both;"></div>
+	</div>
+	<div id="status"></div>
+	<p class="image-container">
+	<img id="image" src="">
+	<img id="loader-image" />
+	</p>
+	<div id="button-panel">
+		<a class="button" style="float:right;" href="javascript:{return false;}" onClick="javascript:{exitImageEditor();}">
+			<div>{{_("back to galleries")|capfirst}}</div>
+			<img src="{{MEDIA_URL}}js/ajax_imaging/icons/door.png">
+		</a>
+		<div style="clear:both;"></div>
+	</div>
+</div>

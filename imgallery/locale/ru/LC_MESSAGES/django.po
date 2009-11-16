@@ -1,0 +1,125 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-09-10 19:26+0600\n"
+"PO-Revision-Date: 2009-09-10 21:38+0600\n"
+"Last-Translator: German Ilyin <germanilyin@gmail.com>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: models.py:13
+msgid "Default"
+msgstr "По умолчанию"
+
+#: models.py:14
+msgid "Photo gallery"
+msgstr "Фото галерея"
+
+#: models.py:15
+msgid "Article gallery"
+msgstr "Фото репортаж"
+
+#: models.py:23
+msgid "type"
+msgstr "тип"
+
+#: templates
+msgid "my albums"
+msgstr "мои альбомы"
+
+#: templates
+msgid "my galleries"
+msgstr "мои галереи"
+
+#: templates
+msgid "create gallery"
+msgstr "создать галерею"
+
+#: templates
+msgid "upload photo"
+msgstr "залить фото"
+
+#: templates
+msgid "delete this gallery"
+msgstr "удалить эту галерею"
+
+#: templates
+msgid "online image editor"
+msgstr "online редактор картинок"
+
+#: templates
+msgid "edit image online"
+msgstr "отредактировать фото online"
+
+#: templates
+msgid "back"
+msgstr "назад"
+
+#: templates
+msgid "forward"
+msgstr "вперед"
+
+#: templates
+msgid "slideshow"
+msgstr "слайдшоу"
+
+#: templates
+msgid "delete"
+msgstr "удалить"
+
+#: templates
+msgid "to original"
+msgstr "к оригиналу"
+
+#: templates
+msgid "save"
+msgstr "сохранить"
+
+#: templates
+msgid "cancel"
+msgstr "отменить"
+
+#: templates
+msgid "resize"
+msgstr "изменить размер"
+
+#: templates
+msgid "crop"
+msgstr "вырезать"
+
+#: templates
+msgid "save selection"
+msgstr "сохранить выделенную область"
+
+#: templates
+msgid "image loaded"
+msgstr "картинка загружена"
+
+#: templates
+msgid "imge loading"
+msgstr "идет загрузка картинки"
+
+#: templates
+msgid "Default folder"
+msgstr "Галерея по умолчанию"
+
+#: templates
+msgid "Default folder for images."
+msgstr "Картинки загружаемые без указания галереи будут сохранены в этой галереи."
+
+#: templates
+msgid "drop image here"
+msgstr "перетащите сюда"
+
+#: templates
+msgid "back to galleries"
+msgstr "назад в галереи"
+

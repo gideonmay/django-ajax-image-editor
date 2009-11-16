@@ -1,0 +1,90 @@
+<h1>{{_("my galleries")|capfirst}}</h1>
+<a class="button" style="float:none;" href="{% url create_photo_gallery %}" onClick="">
+	<div>{{_("create gallery")|capfirst}}</div>
+	<img src="{{MEDIA_URL}}js/ajax_imaging/icons/add.png">
+</a>
+<div class="album-editor" id="album-editor" style="border: 1px solid #eee; width:770px;">
+	<div id="accordion" style="float:none;">
+		{% for object in object_list %}
+		<a class="handle" rel="pane-{{object.pk}}" id="t{{forloop.counter}}"  href="#t{{forloop.counter}}">
+			<img style="float:left;margin: 2px 3px 0 3px;" src="{{MEDIA_URL}}js/ajax_imaging/icons/folder.png">
+			<h1>{{object.name}}</h1>
+			<div id="drop-here-{{object.id}}" class="drop-here" >{{_("drop image here")|capfirst}}</div>
+			<div style="clear:both;"></div>
+		</a>
+		<div id="pane-{{object.pk}}" class="pane">{{object.description}}
+			<input type='hidden' name='album-id' id='album-id' value="{{object.id}}" />
+			<input type='hidden' name='album-name' id='album-name' value="{{object.name}}" />
+			<div class="scrollable pictures">
+				<div class="items">
+					{% for image in object.images.all %}
+						<div class="picture-item">
+								<div rel="is-{{image.pk}}" onmouseout="$('.'+$(this).attr('rel')).hide();" onmouseover="$('.'+$(this).attr('rel')).show();" >
+					            <a href="{{image.data.url}}" rel="lightbox" title="{{image}}">
+					            <img src="{{MEDIA_URL}}{{image.get_thumb_url}}" />
+								</a>
+					            <a style="position:relative;top:-20px;z-index:1;" class="is-{{image.pk}} small-icon icon-edit"  title="{{_("online image editor")|capfirst}}" onClick="javascript:{gallery.changeImage({{image.pk}});ImageEditor.loadImage();showImageEditor();return true;}"></a>						
+								<a style="position:relative;top:-20px;z-index:1;" class="is-{{image.pk}} small-icon icon-trash" title="{{_("delete")|capfirst}} {{image.get_filename}}" onClick="gallery.deleteImage(this, {{image.pk}});"></a>
+								</div>
+								<input type="hidden" name="object-id" id="object-id" value="{{image.pk}}" />
+								<input type="hidden" name="object-name" id="object-name" value="{{image.get_filename}}" />
+					           </div>
+					           
+					{% endfor %}
+				</div>
+			</div>
+			<a class="button" onClick="javascript:{return false;}" id="prev-{{object.id}}">
+				<div>{{_("back")|capfirst}}</div>
+				<img src="{{MEDIA_URL}}js/ajax_imaging/icons/left_arrow.png">
+			</a>
+			<a class="button"  onClick="javascript:{return false;}" id="next-{{object.id}}">
+				<div>{{_("forward")|capfirst}}</div>
+				<img src="{{MEDIA_URL}}js/ajax_imaging/icons/right_arrow.png">
+			</a>
+			<a class="button" onClick="$(this).parent().find('.picture-item img:first').click();">
+				<div>{{_("slideshow")|capfirst}}</div>
+				<img src="{{MEDIA_URL}}js/ajax_imaging/icons/film.png">
+			</a>
+			<a class="button" style="float:right;" onClick="gallery.deleteFolder($(this).parent(), {{object.id}});">
+				<div>{{_("delete this gallery")|capfirst}}</div>
+				<img src="{{MEDIA_URL}}js/ajax_imaging/icons/trash-24.png">
+			</a>
+			<a class="button" style="float:right;" onClick="gallery.openOverlay();">
+				<div>{{_("upload photo")|capfirst}}</div>
+				<img src="{{MEDIA_URL}}js/ajax_imaging/icons/add.png">
+			</a>
+			
+		</div>
+		{% endfor %}
+	</div>
+</div>
+
+<div class="overlay" id="overlay-form">
+	<form id="editform" method="post">
+	{% for field in editform %}
+		{{ field }}
+	{% endfor %}
+	</form>
+	<form class="add-image-form" onSubmit="javascript:{$(this).find('input[name=next]').val(window.location);}" id="add-image-form" enctype="multipart/form-data" method="post" action="{% url image_editor_upload %}">
+	<dl>
+	{% for field in form %}
+		<div id="input">
+		{% if field.is_hidden %}
+		{{field}}
+		{% else %}
+	    <dt id="formlabel">{{ field.label }}</dt>
+	    <dd>{{ field }}</dd>
+	    {% if field.help_text %}<dd class="help_text">{{ field.help_text }}</dd>{% endif %}
+	    {% if field.errors %}<dd class="myerrors">{{ field.errors }}</dd>{% endif %}
+	    {% endif %}
+	    </div>
+	{% endfor %}
+	</dl>
+	<input type="hidden" name="next" value="{{request.path_info}}" />
+	<input type="submit" value="Upload"/>
+	</form>
+	<a class="button" href="#" onClick="gallery.addFile();">
+		<div>{{_("add more")|capfirst}}</div>
+		<img src="{{MEDIA_URL}}js/ajax_imaging/icons/add.png">
+	</a>
+</div>

@@ -1,0 +1,35 @@
+#image-editor{
+	float:left;
+}
+#image-title{
+border: 1px solid gray;
+margin:5px;
+color: white;
+background-color:gray;
+}
+#loader-image {
+    position: absolute;
+    left: 0;
+    top: 0;
+    visibility: hidden;
+}
+#image-right-panel{
+	float:right;
+	border-left:1px solid gray;
+	width:250px;
+}
+
+#button-panel{
+	margin: 3px;
+	border: 1px solid gray;
+}
+
+input.button{
+	border:1px solid black;
+	margin: 2px;
+	background-color: gray;
+	color: white;
+}
+
+.image-container{
+}
